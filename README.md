@@ -1,5 +1,5 @@
 #SERVER SETUP & SECURITY
-####[ACCESS AMAZON INSTANCE](https://www.udacity.com/account#!/developmentenvironment)  
+####1. [ACCESS AMAZON INSTANCE](https://www.udacity.com/account#!/developmentenvironment)  
 1.  Download Private Key from link below
 1.  Move the private key file into the folder ~/.ssh (where ~ is your environment's home directory). So if you downloaded the file to the Downloads folder, just execute the following command in your terminal  
 
@@ -15,19 +15,19 @@
 
 5. You are now logged in to your Amazon remote instance
 
-####[MAKE SURE ALL PACKAGES ARE UP TO DATE](https://classroom.udacity.com/nanodegrees/nd004/parts/00413454010/modules/357367901175461/lessons/4331066009/concepts/48010894520923)
+####2. [MAKE SURE ALL PACKAGES ARE UP TO DATE](https://classroom.udacity.com/nanodegrees/nd004/parts/00413454010/modules/357367901175461/lessons/4331066009/concepts/48010894520923)
 
 `sudo apt-get update`  
 `sudo apt-get upgrade  `
 
     
-####[CREATE A NEW USER NAMED GRADER AND GRANT SUDO ACCESS](http://askubuntu.com/questions/168280/how-do-i-grant-sudo-privileges-to-an-existing-user)      
+####3. [CREATE A NEW USER NAMED GRADER AND GRANT SUDO ACCESS](http://askubuntu.com/questions/168280/how-do-i-grant-sudo-privileges-to-an-existing-user)      
 Before adding a user, make sure to change password for root user by typing `passwd` in the command line. This step is somewhat redundant as we will later disable remote root login.
 
 Having changed passwords, enter the following two commands for user creation and granting sudo privileges to our new user.
 
-    `sudo adduser grader`  
-    `sudo adduser grader sudo`
+    sudo adduser grader
+    sudo adduser grader sudo
 
 Optionally, we may install the finger application by typing `sudo apt-get install finger` and then ensuring our user was created successfully and granted the correct privileges by typing `finger grader`  
   
@@ -43,7 +43,7 @@ When running this command, we receive a warning message alerting us that the `ho
 
     `sudo nano /etc/hosts`  
 
-1. Append the hostname you copied when you ran the first comman to the last line so you end up with something that looks like this  
+1. Append the hostname you copied when you ran the first command to the last line so you end up with something that looks like this  
 
     `127.0.0.1 localhost ip-10-20-51-76`  
 
@@ -57,7 +57,7 @@ When running this command, we receive a warning message alerting us that the `ho
 
 1. You should no longer see the warning message from now on 
 
-####[GENERATE KEYS LOCALLY FOR GRADER KEY-BASED IDENTIFICATION](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2)
+####4. [GENERATE KEYS LOCALLY FOR GRADER KEY-BASED IDENTIFICATION](https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys--2)
 1. Locally, run the following command  
 
     `LocalUser ~ $ ssh-keygen -t rs`
@@ -94,11 +94,11 @@ When running this command, we receive a warning message alerting us that the `ho
   
 Upon login, you may see a message that says __*system restart required*__. To do so, just enter the command  
 
-    `sudo reboot`    
+    sudo reboot
 
 This will shutdown and disconnect all users from server. Wait about 10 seconds before you attempt to log back in, otherwise, you may receive a timed out error because you tried logging in when the server was in the middle of rebooting.
 
-####[CONFIGURE THE LOCAL TIMEZONE TO UTC](http://askubuntu.com/questions/138423/how-do-i-change-my-timezone-to-utc-gmt/138442)
+####5. [CONFIGURE THE LOCAL TIMEZONE TO UTC](http://askubuntu.com/questions/138423/how-do-i-change-my-timezone-to-utc-gmt/138442)
 1. Run the following command   
 
     `sudo dpkg-reconfigure tzdata`  
@@ -107,14 +107,15 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
 3. From the pop-up menu, select your time zone and press Enter
 4. You should now see the following output on your console  
 
-    `Current default time zone: 'US/Pacific'`    
-    `Local time is now:      Fri Apr 15 17:29:17 PDT 2016.`  
-    `Universal Time is now:  Sat Apr 16 00:29:17 UTC 2016.`    
+    Current default time zone: 'US/Pacific'  
+    Local time is now:      Fri Apr 15 17:29:17 PDT 2016.  
+    Universal Time is now:  Sat Apr 16 00:29:17 UTC 2016.  
+
 5. Configure NTP Synchronization to stay in sync if we ever need to deploy along with other servers  
 
     `sudo apt-get install ntp`
 
-####[CHANGE PORT NUMBER FROM 22 TO 2200](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-12-04)
+####6. [CHANGE PORT NUMBER FROM 22 TO 2200](https://www.digitalocean.com/community/tutorials/initial-server-setup-with-ubuntu-12-04)
 1. Open the configuration file with nano file editor using the following command   
 `sudo nano /etc/ssh/sshd_config`
 1. Look for, and change the following values:  
@@ -135,7 +136,7 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
   
     `ssh -i ~/.ssh/grader_key grader@52.38.248.138 -p 2200`
 
-####[CONFIGURE UNCOMPLICATED FIREWALL (UFW)]([https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers#tutorial_series_32])
+####7. [CONFIGURE UNCOMPLICATED FIREWALL (UFW)]([https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers#tutorial_series_32])
 1. Allow ssh connections on port 2200 only  
 
     `sudo ufw allow 2200/tcp`  
@@ -161,7 +162,7 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
     `sudo ufw status verbose`  
 
 #APPLICATION INSTALLATION AND DEPLOYMENT
-####[INSTALL AND CONFIGURE APACHE2 TO SERVE A PYTHON MOD_WSGI APPLICATION](http://blog.udacity.com/2015/03/step-by-step-guide-install-lamp-linux-apache-mysql-python-ubuntu.html)  
+####1. [INSTALL AND CONFIGURE APACHE2 TO SERVE A PYTHON MOD_WSGI APPLICATION](http://blog.udacity.com/2015/03/step-by-step-guide-install-lamp-linux-apache-mysql-python-ubuntu.html)  
 1. To install our application server, run  
 
     `sudo apt-get install apache2`  
@@ -174,7 +175,7 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
 
     `sudo service apache2 restart`
 
-####[INSTALL AND CONFIGURE POSTGRE]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
+####2. [INSTALL AND CONFIGURE POSTGRE]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
 1. To install Postgre, run  
 
     `sudo apt-get install postgresql postgresql-contrib`  
@@ -207,7 +208,7 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
     `\q`  
     `exit`
 
-####[INSTALL GIT AND CLONE REPOSITORY]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
+####5. [INSTALL GIT AND CLONE REPOSITORY]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
 1. Start by installing git  
 
     `apt-get install git`  

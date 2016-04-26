@@ -350,5 +350,5 @@ Now that Apache is serving our application from the amazon instance we can see t
 1. [https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04)
 1. [https://www.youtube.com/watch?v=kDRRtPO0YPA](https://www.youtube.com/watch?v=kDRRtPO0YPA)  
 1. [https://www.youtube.com/watch?v=x6SvecADw2M](https://www.youtube.com/watch?v=x6SvecADw2M)  
-1. [https://classroom.udacity.com/nanodegrees/nd004/parts/00413454010/modules/357367901175461/lessons/4331066009/concepts/48010894520923](https://classroom.udacity.com/nanodegrees/nd004/parts/00413454010/modules/357367901175461/lessons/4331066009/concepts/48010894520923)    
+1. [https://discussions.udacity.com/c/nd004-p5-linux-based-server-configuration](https://discussions.udacity.com/c/nd004-p5-linux-based-server-configuration)  
   

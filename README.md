@@ -1,6 +1,9 @@
-#SERVER SETUP & SECURITY
+#LINUX SERVER CONFIGURATION
+This project involves the configuration of a  Linux server to host the catalog application we wrote for project 3. This is broken down in two steps, the setup and security of the server and the deployment of the application.
+
+##SERVER SETUP & SECURITY
 ####1. [ACCESS AMAZON INSTANCE](https://www.udacity.com/account#!/developmentenvironment)  
-1.  Download Private Key from link below
+1.  Download Private Key 
 1.  Move the private key file into the folder ~/.ssh (where ~ is your environment's home directory). So if you downloaded the file to the Downloads folder, just execute the following command in your terminal  
 
     `mv ~/Downloads/udacity_key.rsa ~/.ssh/`
@@ -18,7 +21,7 @@
 ####2. [MAKE SURE ALL PACKAGES ARE UP TO DATE](https://classroom.udacity.com/nanodegrees/nd004/parts/00413454010/modules/357367901175461/lessons/4331066009/concepts/48010894520923)
 
 `sudo apt-get update`  
-`sudo apt-get upgrade  `
+`sudo apt-get upgrade`
 
     
 ####3. [CREATE A NEW USER NAMED GRADER AND GRANT SUDO ACCESS](http://askubuntu.com/questions/168280/how-do-i-grant-sudo-privileges-to-an-existing-user)      
@@ -63,7 +66,7 @@ When running this command, we receive a warning message alerting us that the `ho
     `LocalUser ~ $ ssh-keygen -t rs`
 
 1.  Enter a file name for the key we are about to generate (grader_key) and optional passphrase
-1.  Copy the grader_key file to the remote server by typing the following command  
+1.  Copy the grader_key.pub file to the remote server by typing the following command  
 
     `cat ~/.ssh/grader_key.pub | ssh root@52.38.248.138 -i ~/.ssh/udacity_key.rsa "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"`  
 
@@ -125,10 +128,11 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
 
     Change this value from `Port 22` to `Port 2200`. Then look for the section below
 
-        `# Authentication:`  
-        `LoginGraceTime 120`
-        `PermitRootLogin without-password`  
-        `StrictModes yes`  
+    `# Authentication:`  
+
+    `LoginGraceTime 120`  
+    `PermitRootLogin without-password`  
+    `StrictModes yes`  
 
     Change `PermitRootLogin without-password` to `PermitRootLogin no`. These changes will allow access to users with SSH keys only, rendering the root user useless.
     
@@ -159,9 +163,59 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
 
 1. One last check to make sure everything is in good standing  
 
-    `sudo ufw status verbose`  
+    `sudo ufw status verbose`    
+  
+###7. [PROTECTING SERVER AGAINST BRUTE FORCE ATTACKS](https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-12-04)
+Now that our server is out in the open, we need to take measures to make it more difficult to hijack. We can do this by installing fail2ban.  
 
-#APPLICATION INSTALLATION AND DEPLOYMENT
+1. Install fail2ban  
+
+    `sudo apt-get install fail2ban`  
+
+1. Copy configuration file  
+
+    `sudo cp /etc/fail2ban/jail.conf /etc/fail2ban/jail.local`  
+
+1. Configure the details in jail.local file  
+  
+    `sudo nano /etc/fail2ban/jail.local`  
+  
+    Then, look for the section below and make the appropriate changes
+    
+    `[DEFAULT]`
+    
+    `# "ignoreip" can be an IP address, a CIDR mask or a DNS host`  
+    ` ignoreip = 127.0.0.1/8`  
+    `bantime  = 600`  
+    `maxretry = 3`
+
+    `# "backend" specifies the backend used to get files modification. Available`  
+    `# options are "gamin", "polling" and "auto".`  
+    `# yoh: For some reason Debian shipped python-gamin didn't work as expected`  
+    `#      This issue left ToDo, so polling is default backend for now`  
+    `backend = auto`
+ 
+  
+    `# Destination email address used solely for the interpolations in`  
+    `# jail.{conf,local} configuration files.`   
+    `destemail = root@localhost`  
+  
+    Add your IP address(es) that you'd be loggin in from to the `ignoreip` list. Separate multiple addresses with spaces.  This will prevent you from accidentally banning yourself out of the system. Make sure to change the `destmail` email address to where ever you want notifications to be sent. Finally, make sure to update the port number under `[SSH]` to 2200 or whatever your login port is. 
+
+1. Restart fail2ban  
+    
+      `sudo service fail2ban restart`
+
+    You can check if the system is running by typing `pgrep fail2ban -fl` and if everything installed correctly you will see an output like this  
+  
+    *`15915 fail2ban-server`*  
+
+####How to Test Banning Policies
+[To test whether our banning policies are working, you can follow the rules outlined here.](https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04) under the section "Testing the Banning Policies"  
+
+#####Warning: make sure you to add your IP address to the whitelist, or at least test this at the very end since you are at risk of locking yourself out.
+
+##APPLICATION INSTALLATION AND DEPLOYMENT
 ####1. [INSTALL AND CONFIGURE APACHE2 TO SERVE A PYTHON MOD_WSGI APPLICATION](http://blog.udacity.com/2015/03/step-by-step-guide-install-lamp-linux-apache-mysql-python-ubuntu.html)  
 1. To install our application server, run  
 
@@ -206,9 +260,10 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
 1. Exit psql by typing the following commands  
 
     `\q`  
-    `exit`
+    `exit`  
+  
 
-####5. [INSTALL GIT AND CLONE REPOSITORY]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
+####3. [INSTALL GIT AND CLONE REPOSITORY]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
 1. Start by installing git  
 
     `apt-get install git`  
@@ -217,9 +272,14 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
 
     `cd ../../../var/www`  
 
+1.  Create a directory called catalog and navigate to it
+  
+    `sudo mkdir catalog`
+    `cd catalog`
+
 1. Clone the catalog application from git repository  
 
-    `sudo git clone https://github.com/NeoCodesOracle/CatalogApp.git`  
+    `sudo git clone https://github.com/yourgitusername/repotoclone.git`  
 
 1. Follow the next instructions to make Github repository inaccessible. Change directory into newly-cloned directory  
 
@@ -231,31 +291,17 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
 
 1. Paste the following line and save file  
 
-    `RedirectMatch 404 /\.git`
+    `RedirectMatch 404 /\.git`  
+  
+Note: In order to ensure our application works as expected, we nee to make the following changes to the following files:  
 
+1. Change the name of `catalogApp.py` to `__init__.py`  
+1. Within `__init__.py` and `catalog_database.py`, update the the line   
+`engine = create_engine('sqlite:///catalog.db')`  with `engine = create_engine('postgresql://catalog:mypasswordgoeshere@localhost/catalog')`.   
+1. Within `__init__.py`, update all references to `client_secrets.json` to reflect the absolute path
 
----
-Activity log  
-1.sudo pip install virtualenv  
-1.sudo virtualenv venv  
-1.sudo chmod -R 777 venv  
-1.source venv/bin/activate  
-1.sudo pip install Flask  
-1.sudo pip install Flask -t /var/www/catalog/catalog/venv/lib/python2.7/site-packages  
-1. pip install httplib2  
-1. pip show flask
-1. pip install requests  
-1. sudo pip install flask-seasurf  
-1. sudo pip install --upgrade oauth2client  
-1. sudo pip install sqlalchemy  
-1. sudo apt-get install python-psycopg2  
-1.Deactivate venv: $ deactivate  
-1.Create configuration file for new site sudo nano /etc/apache2/sites-available/catalog.conf (see file content below)  
-1.Enable site: sudo a2ensite catalog  
-1.Create app file: sudo nano /var/www/catalog/app.wsgi (see file content below)  
-1.Restart server: sudo service apache2 restart  
-
-####RESOLVING OAUTH
+###RESOLVING OAUTH  
+####Google Signin
 Now that Apache is serving our application from the amazon instance we can see that our login functionality is not working. Fixing it is just a matter of updating the Authorized JavaScript origins and Authorized redirect URIs.  
 
 1. Go to [https://console.developers.google.com/project](https://console.developers.google.com/project)  
@@ -263,5 +309,45 @@ Now that Apache is serving our application from the amazon instance we can see t
 1. Then go to *__Credentials__* and select your project from the list of OAuth 2.0 client IDs  
 1. Add the public IP address where your project is hosted (i.e. 52.38.112.238) to the Authorized JavaScript origins section  
 1. Add the FQDN (fully qualified domain name) to the Authorized JavaScript origins section  
-1. Add the FQDN (fully qualified domain name) to the Authorized redirect URIs section and append *__/oauth2callback__* (i.e. *__http://ec2-52-38-112-238.us-west-2.compute.amazonaws.com/oauth2callback__*)
+1. Add the FQDN (fully qualified domain name) to the Authorized redirect URIs section and append _/oauth2callback_ (i.e. _http://ec2-52-38-112-238.us-west-2.compute.amazonaws.com/oauth2callback_)
 
+####Facebook Signin
+1. Go to [https://developers.facebook.com/](https://developers.facebook.com/)
+1. Select your application
+1. Go to Settings
+1. On the right pane, select Advanced and scroll down to the section Valid OAuth redirect URIs
+1. Add the FQDN
+1. Lastly, make sure the OAuth Logins for Client, Web and Embedded Browser are all set to *Yes*
+
+---
+###Installed Packages
+1. ntp  
+1. apache2  
+1. libapache2-mod-wsgi
+1. python-dev
+1. git
+1. python-pip
+1. virtualenv
+1. Flask
+1. httplib2
+1. requests
+1. sqlalchemy
+1. python-psycopg2
+1. sqlalchemy
+1. oauth2client
+1. postgresql
+1. postgresql-contrib
+1. fail2ban
+1. sendmail
+###Additional References  
+1. [https://help.ubuntu.com/lts/serverguide/postgresql.html](https://help.ubuntu.com/lts/serverguide/postgresql.html)    
+1. [http://askubuntu.com/questions/25374/how-do-you-install-mod-wsgi](http://askubuntu.com/questions/25374/how-do-you-install-mod-wsgi)
+1. [https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04](https://www.digitalocean.com/community/tutorials/how-to-protect-ssh-with-fail2ban-on-ubuntu-14-04)  
+1. [https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)  
+1. [http://unix.stackexchange.com/questions/119623/check-that-fail2ban-is-running](http://unix.stackexchange.com/questions/119623/check-that-fail2ban-is-running)  
+1. [http://www.linuxquestions.org/questions/linux-security-4/fail2ban-is-it-working-705244/](http://www.linuxquestions.org/questions/linux-security-4/fail2ban-is-it-working-705244/)  
+1. [https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-14-04)
+1. [https://www.youtube.com/watch?v=kDRRtPO0YPA](https://www.youtube.com/watch?v=kDRRtPO0YPA)  
+1. [https://www.youtube.com/watch?v=x6SvecADw2M](https://www.youtube.com/watch?v=x6SvecADw2M)  
+1. [https://classroom.udacity.com/nanodegrees/nd004/parts/00413454010/modules/357367901175461/lessons/4331066009/concepts/48010894520923](https://classroom.udacity.com/nanodegrees/nd004/parts/00413454010/modules/357367901175461/lessons/4331066009/concepts/48010894520923)    
+  

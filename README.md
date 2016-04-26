@@ -1,6 +1,12 @@
 #LINUX SERVER CONFIGURATION
 This project involves the configuration of a  Linux server to host the catalog application we wrote for project 3. This is broken down in two steps, the setup and security of the server and the deployment of the application.
 
+#####INSTRUCTIONS
+1. The server can be accessed via SSH through **port 2200**
+1. The complete URL to the hosted web application is [http://ec2-52-38-112-238.us-west-2.compute.amazonaws.com/](http://ec2-52-38-112-238.us-west-2.compute.amazonaws.com/)    
+1. A detailed list of software installed is included at the bottom of this document  under Installed Packages  
+1. A detailed list of third party resources is listed at the bottom of this document under Additional References
+
 ##SERVER SETUP & SECURITY
 ####1. [ACCESS AMAZON INSTANCE](https://www.udacity.com/account#!/developmentenvironment)  
 1.  Download Private Key 

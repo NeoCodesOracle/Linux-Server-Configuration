@@ -140,7 +140,7 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
   
     `ssh -i ~/.ssh/grader_key grader@52.38.248.138 -p 2200`
 
-####7. [CONFIGURE UNCOMPLICATED FIREWALL (UFW)]([https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers#tutorial_series_32])
+####7. [CONFIGURE UNCOMPLICATED FIREWALL (UFW)](https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers#tutorial_series_32)
 1. Allow ssh connections on port 2200 only  
 
     `sudo ufw allow 2200/tcp`  
@@ -229,7 +229,7 @@ Now that our server is out in the open, we need to take measures to make it more
 
     `sudo service apache2 restart`
 
-####2. [INSTALL AND CONFIGURE POSTGRE]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
+####2. [INSTALL AND CONFIGURE POSTGRE](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)
 1. To install Postgre, run  
 
     `sudo apt-get install postgresql postgresql-contrib`  
@@ -263,7 +263,7 @@ Now that our server is out in the open, we need to take measures to make it more
     `exit`  
   
 
-####3. [INSTALL GIT AND CLONE REPOSITORY]([https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps])
+####3. [INSTALL GIT AND CLONE REPOSITORY](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)
 1. Start by installing git  
 
     `apt-get install git`  
@@ -338,7 +338,8 @@ Now that Apache is serving our application from the amazon instance we can see t
 1. postgresql
 1. postgresql-contrib
 1. fail2ban
-1. sendmail
+1. sendmail  
+
 ###Additional References  
 1. [https://help.ubuntu.com/lts/serverguide/postgresql.html](https://help.ubuntu.com/lts/serverguide/postgresql.html)    
 1. [http://askubuntu.com/questions/25374/how-do-you-install-mod-wsgi](http://askubuntu.com/questions/25374/how-do-you-install-mod-wsgi)

@@ -1,5 +1,5 @@
 #LINUX SERVER CONFIGURATION
-This project involves the configuration of a  Linux server to host the catalog application we wrote for project 3. This is broken down in two steps, the setup and security of the server and the deployment of the application.
+This project involves the configuration of a baseline installation of a Linux distribution on a virtual machine and preparing it to  host the Catalog application we wrote for project 3.  The configuration of this server includes installing updates and securing it from a number of attack vectors, as well as installing/configuring web and database servers.
 
 #####INSTRUCTIONS
 1. The server can be accessed via SSH through **port 2200**  
@@ -21,7 +21,7 @@ This project involves the configuration of a  Linux server to host the catalog a
 
 4. Followed by the command  
 
-    `ssh -i ~/.ssh/udacity_key.rsa root@52.38.248.138`  
+    `ssh -i ~/.ssh/udacity_key.rsa root@52.38.112.238`  
 
 5. You are now logged in to your Amazon remote instance
 
@@ -75,11 +75,11 @@ When running this command, we receive a warning message alerting us that the `ho
 1.  Enter a file name for the key we are about to generate (grader_key) and optional passphrase
 1.  Copy the grader_key.pub file to the remote server by typing the following command  
 
-    `cat ~/.ssh/grader_key.pub | ssh root@52.38.248.138 -i ~/.ssh/udacity_key.rsa "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"`  
+    `cat ~/.ssh/grader_key.pub | ssh root@52.38.112.238 -i ~/.ssh/udacity_key.rsa "mkdir -p ~/.ssh && cat >>  ~/.ssh/authorized_keys"`  
 
 1. Log into remote server  
 
-    `ssh -i ~/.ssh/udacity_key.rsa root@52.38.248.138`  
+    `ssh -i ~/.ssh/udacity_key.rsa root@52.38.112.238`  
 
 1. Navigate to the grader directory with the following command  
 
@@ -145,7 +145,7 @@ This will shutdown and disconnect all users from server. Wait about 10 seconds b
     
     From now on when logging in, we need to specify the port to connect to, since we changed the default value. Connections to our instance will now have the following form  
   
-    `ssh -i ~/.ssh/grader_key grader@52.38.248.138 -p 2200`
+    `ssh -i ~/.ssh/grader_key grader@52.38.112.238 -p 2200`
 
 ####7. [CONFIGURE UNCOMPLICATED FIREWALL (UFW)](https://www.digitalocean.com/community/tutorials/additional-recommended-steps-for-new-ubuntu-14-04-servers#tutorial_series_32)
 1. Allow ssh connections on port 2200 only  
